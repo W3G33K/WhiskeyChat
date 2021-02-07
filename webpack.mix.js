@@ -1,4 +1,8 @@
 const mix = require('laravel-mix');
+const env = process.env;
+
+const productionSourceMaps = false;
+const publicPath = './public';
 
 /*
  |--------------------------------------------------------------------------
@@ -11,7 +15,24 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+mix.js('./resources/js/app.js', 'js')
+	.js('./resources/js/kickoff.js', 'js')
+	.js('./resources/js/pages/chat.js', 'js/pages')
+	.css('./resources/css/app.css', 'css')
+	.setPublicPath(publicPath)
+	.sourceMaps(productionSourceMaps, 'source-map');
+// console.log(typeof env.APP_DEBUG, env.APP_DEBUG, typeof env.APP_ENV, env.APP_ENV);
+if ((env.APP_DEBUG !== "true") ||
+	(['staging', 'production'].includes(env.APP_ENV) === true)) {
+	mix.version();
+	mix.webpackConfig({
+		module: {
+			rules: [
+				{
+					test: /\.js$/,
+					use: './whiskey-debug-stripper'
+				}
+			]
+		}
+	});
+}
