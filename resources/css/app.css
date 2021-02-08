@@ -11,6 +11,10 @@ body {
 	font-family: "Ubuntu", sans-serif;
 }
 
+form label:after {
+	content: ":"
+}
+
 .icon {
 	font-style: normal;
 	vertical-align: text-bottom;
@@ -28,7 +32,7 @@ body {
 	padding: 16px;
 }
 
-.top_menu .buttons .button {
+.buttons .button {
 	border-radius: 50%;
 	display: inline-block;
 	height: 16px;
@@ -37,15 +41,15 @@ body {
 	width: 16px;
 }
 
-.top_menu .buttons .button.close-button {
+.buttons .button.close-button {
 	background-color: #f5886e;
 }
 
-.top_menu .buttons .button.minimize {
+.buttons .button.minimize {
 	background-color: #fdbf68;
 }
 
-.top_menu .buttons .button.maximize {
+.buttons .button.maximize {
 	background-color: #a3d063;
 }
 

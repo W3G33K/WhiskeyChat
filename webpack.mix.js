@@ -16,8 +16,8 @@ const publicPath = './public';
  */
 
 mix.js('./resources/js/app.js', 'js')
-	.js('./resources/js/kickoff.js', 'js')
 	.js('./resources/js/pages/chat.js', 'js/pages')
+	.js('./resources/js/pages/user.js', 'js/pages')
 	.css('./resources/css/app.css', 'css')
 	.setPublicPath(publicPath)
 	.sourceMaps(productionSourceMaps, 'source-map');

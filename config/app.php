@@ -54,7 +54,7 @@
 
 		'url' => env('APP_URL', 'http://localhost'),
 
-		'asset_url' => env('ASSET_URL', null),
+		'asset_url' => env('ASSET_URL'),
 
 		/*
 		|--------------------------------------------------------------------------
@@ -165,6 +165,7 @@
 			/*
 			 * Package Service Providers...
 			 */
+			Musonza\Chat\ChatServiceProvider::class,
 
 			/*
 			 * Application Service Providers...
@@ -226,6 +227,11 @@
 			'URL' => Illuminate\Support\Facades\URL::class,
 			'Validator' => Illuminate\Support\Facades\Validator::class,
 			'View' => Illuminate\Support\Facades\View::class,
+
+			/*
+			 * Package Aliases...
+			 */
+			'Chat' => Musonza\Chat\Facades\ChatFacade::class,
 
 		],
 

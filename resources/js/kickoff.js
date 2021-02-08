@@ -1,7 +1,6 @@
-if (typeof window.Page !== "undefined") {
-	window.registerPage();
-	$document.ready(function() {
-		window.page = new Page();
-		page.ready();
-	});
-}
+$window.on('whiskey.kickoff', function() {
+	window.page = new Page();
+	$document.ready(page.compose);
+	$window.on('beforeunload', page.dispose);
+	$window.on('unload', page.dispose);
+});

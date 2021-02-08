@@ -1,10 +1,10 @@
-const whiskey = Object.assign({}, window.whiskey);
-window.registerPage = (function() {
+whiskey.registerPage(function() {
 	window.Page = Class.extend(Page, {
-		ready() {
+		compose() {
 			this.parent();
 			// @START_WHISKEY_DEBUG
-			whiskey.debug('chat-ready', console.info); // @END_WHISKEY_DEBUG
+			console.info('chat-ready'); // @END_WHISKEY_DEBUG
+			$body.addClass('overflow-hidden');
 			page.promptNickName();
 		},
 
@@ -45,4 +45,6 @@ window.registerPage = (function() {
 			});
 		},
 	});
+
+	return $window;
 });

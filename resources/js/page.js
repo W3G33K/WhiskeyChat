@@ -1,18 +1,25 @@
-const whiskey = Object.assign({}, window.whiskey);
 const Page = Class.create({
-	initialize() {
+	compose() {
 		// @START_WHISKEY_DEBUG
-		whiskey.debug('page-initialize', console.info); // @END_WHISKEY_DEBUG
+		console.info('page-ready'); // @END_WHISKEY_DEBUG
+		$body.removeClass('invisible');
+		page.registerEvents();
 	},
 
-	ready() {
+	dispose() {
 		// @START_WHISKEY_DEBUG
-		whiskey.debug('page-ready', console.info); // @END_WHISKEY_DEBUG
-		$body.addClass(['bg-dark', 'overflow-hidden']);
-		setInterval(function() {
-			document.title = ((document.title.startsWith('🟢 ')) ? document.title.substr(3) : ('🟢 ' + document.title));
-		}, 1000);
+		console.info('page-dispose'); // @END_WHISKEY_DEBUG
 	},
+
+	initialize() {
+		// @START_WHISKEY_DEBUG
+		console.info('page-initialize'); // @END_WHISKEY_DEBUG
+	},
+
+	registerEvents() {
+		// @START_WHISKEY_DEBUG
+		console.info('page-register-events'); // @END_WHISKEY_DEBUG
+	}
 });
 
 module.exports = Page;

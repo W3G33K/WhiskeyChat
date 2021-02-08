@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="author" content="Ryan Clark"/>
+		<meta name="description" content="Sophisticated communication for sophisticated lads &amp; lasses."/>
+		<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+		@yield('additional-metadata')
+
+		<title>{{ config('app.name', 'WhiskeyChat') }}</title>
+
+		<!-- Page Scripts: -->
+		@yield('page-scripts')
+
+		<!-- Page Stylesheets: -->
+		@yield('page-stylesheets')
+		<link type="text/css" rel="stylesheet" href="{{ asset('css/app.css') }}"/>
+		@yield('override-stylesheets')
+	</head>
+
+	<body class="bg-dark invisible">
+		<main class="d-flex flex-column min-vh-100">
+			@yield('header')
+			@yield('content')
+			@yield('footer')
+		</main>
+
+		<!-- DOM Templates: -->
+		@yield('dom-templates')
+
+		<!-- Body Scripts: -->
+		<script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+		@yield('body-scripts')
+	</body>
+</html>

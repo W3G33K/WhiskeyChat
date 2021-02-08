@@ -50,7 +50,7 @@
 				StartSession::class,
 				// \Illuminate\Session\Middleware\AuthenticateSession::class,
 				ShareErrorsFromSession::class,
-				VerifyCsrfToken::class,
+				// \App\Http\Middleware\VerifyCsrfToken::class,
 				SubstituteBindings::class,
 			],
 
