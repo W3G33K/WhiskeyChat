@@ -116,9 +116,13 @@ whiskey.registerPage(function() {
 		sendMessage(keyCode = 13) {
 			// @START_WHISKEY_DEBUG
 			console.info('send-message'); // @END_WHISKEY_DEBUG
+			const $sendBtn = jQuery('button:contains("Send")');
 			const $message = jQuery('input[name="message"]'),
 				message = _.trimStart($message.val());
-			if (keyCode === 13 && _.trim(message) !== '') {
+			const isSendBtnDisabled = $sendBtn.prop('disabled');
+			if ((isSendBtnDisabled === false) &&
+				(keyCode === 13 && _.trim(message) !== '')) {
+				$sendBtn.prop('disabled', true);
 				const myRoomIdentifier = jQuery('input[name="room-id"]').val();
 				const myParticipantIdentifier = jQuery('input[name="participant-id"]').val();
 				const myParticipantType = jQuery('input[name="participant-type"]').val();
@@ -131,8 +135,9 @@ whiskey.registerPage(function() {
 				}, function(response) {
 					// @START_WHISKEY_DEBUG
 					console.info('send-message-response', response); // @END_WHISKEY_DEBUG
-					$message.val(null);
 					page.displayMessages();
+					$message.val(null);
+					$sendBtn.prop('disabled', false);
 				});
 			} else {
 				$message.val(message);
