@@ -21,9 +21,7 @@ mix.js('./resources/js/app.js', 'js')
 	.css('./resources/css/app.css', 'css')
 	.setPublicPath(publicPath)
 	.sourceMaps(productionSourceMaps, 'source-map');
-// console.log(typeof env.APP_DEBUG, env.APP_DEBUG, typeof env.APP_ENV, env.APP_ENV);
-if ((env.APP_DEBUG !== "true") ||
-	(['staging', 'production'].includes(env.APP_ENV) === true)) {
+if (mix.inProduction() && env.APP_DEBUG === "false") {
 	mix.version();
 	mix.webpackConfig({
 		module: {

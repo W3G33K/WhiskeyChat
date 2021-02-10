@@ -14,7 +14,7 @@ try {
 	window.Class = require('./ext-lib/inheritance-2.7');
 	window.$ = window.jQuery = require('jquery');
 	window._ = require('lodash');
-	window.createPopper = require('@popperjs/core');
+	window.Popper = require('popper.js');
 	require('bootstrap');
 
 	// Globalize commonly used elements for convenience;
@@ -45,7 +45,7 @@ try {
 
 	let wrapperStyles = wrapperElement.style;
 	wrapperStyles.color = '#ffffff';
-	wrapperStyles.margin = '8px';
+	wrapperStyles.padding = '8px 8px 0';
 	wrapperStyles.textAlign = 'center';
 
 	h1Element.appendChild(errorTitle);
@@ -72,7 +72,12 @@ try {
 
 	// TODO: Submit error logs to server.
 
-	body.removeAttribute('class');
+	let classAttribute = body.getAttribute('class'),
+		classList = classAttribute.split(' ');
+	let invisiClassIndex = classList.lastIndexOf('invisible');
+	classList.splice(invisiClassIndex, 1);
+	body.setAttribute('class', classList.join(' '));
 	console.error(`WhiskeyChat failed to initialized during bootstrapping process: ${e.message}`);
+
 	throw e;
 }

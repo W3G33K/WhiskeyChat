@@ -10,11 +10,11 @@
 		"production": "mix --production"
 	},
 	"devDependencies": {
-		"@popperjs/core": "^2.6.0",
 		"bootstrap": "^4.6.0",
 		"jquery": "^3.5.1",
 		"laravel-mix": "^6.0.11",
 		"lodash": "^4.17.19",
+		"popper.js": "^1.16.1",
 		"postcss": "^8.1.14"
 	}
 }
