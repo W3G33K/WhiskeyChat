@@ -22,26 +22,28 @@ whiskey.registerPage(function() {
 				$messagePane.empty(); // TODO: figure out an offset index for messages instead of constantly re-rendering all of them.
 				for (let message of messages) {
 					let participant = message.sender;
-					let diff = page.timeDifference(Date.now(), new Date(message.created_at));
+					let sentWhenAgo = page.timeDifference(Date.now(), new Date(message.created_at));
+
+					let $message;
 					if (_.eq(myParticipantIdentifier, participant.id) && _.eq(myParticipantNickname, participant.nickname)) {
-						jQuery(`
+						$message = jQuery(`
 							<li class="alert alert-success text-break text-wrap">
 								<h6>${participant.nickname}</h6>
-								${message.body}
-								<p class="m-0 text-success small when">${diff}</p>
+								<p class="alert-body">&nbsp;</p>
+								<p class="m-0 text-success small when">${sentWhenAgo}</p>
 							</li>`).appendTo($messagePane);
 					} else {
-						jQuery(`
+						$message = jQuery(`
 							<li class="alert alert-primary text-break text-wrap">
 								<h6>${participant.nickname}</h6>
-								${message.body}
-								<p class="m-0 text-primary small when">${diff}</p>
+								<p class="alert-body">&nbsp;</p>
+								<p class="m-0 text-primary small when">${sentWhenAgo}</p>
 							</li>`).appendTo($messagePane);
 					}
 
-					/* $htmlbody.animate({
-						scrollTop: $document.height()
-					}, 'slow'); // GOT A MIND OF ITS OWN!!! 😂 */
+					$message
+						.find('.alert-body')
+						.text(_.unescape(message.body));
 
 					// @START_WHISKEY_DEBUG
 					console.info('render-messages', participant.nickname, message.body, messages); // @END_WHISKEY_DEBUG
@@ -132,7 +134,7 @@ whiskey.registerPage(function() {
 					participant_id: myParticipantIdentifier,
 					participant_type: myParticipantType,
 					message: {
-						body: message
+						body: _.escape(message)
 					}
 				}, function(response) {
 					// @START_WHISKEY_DEBUG
