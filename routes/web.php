@@ -1,5 +1,6 @@
 <?php
 
+	use App\Http\Controllers\ChatController;
 	use App\Http\Controllers\UserController;
 	use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,9 @@
 	|
 	*/
 
-	Route::get('/', [UserController::class, 'create'])->name('welcome');
-	Route::get('/user', [UserController::class, 'create']);
-	Route::post('/user/join', [UserController::class, 'store'])->name('join-chat');
+	Route::get('/room/general', [ChatController::class, 'index'])->name('room.general');
+
+	Route::get('/', [UserController::class, 'create'])->name('login');
+
+	Route::post('/join', [UserController::class, 'store'])->name('join');
+

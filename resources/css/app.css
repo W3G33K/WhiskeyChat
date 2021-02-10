@@ -15,6 +15,10 @@ form label:after {
 	content: ":"
 }
 
+.bg-light-gray {
+	background-color: #e9e9e9;
+}
+
 .icon {
 	font-style: normal;
 	vertical-align: text-bottom;
@@ -24,12 +28,9 @@ form label:after {
 	content: "\1F464"
 }
 
-.top_menu {
-	background-color: #ffffff;
+.menubar {
 	border-radius: 0 0 0 8px;
-	box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
-	color: #b8b8b8;
-	padding: 16px;
+	color: #92989e;
 }
 
 .buttons .button {
@@ -53,104 +54,13 @@ form label:after {
 	background-color: #a3d063;
 }
 
-.messages {
-	overflow-y: scroll;
-}
-
-.messages .message {
-	clear: both;
-	margin-bottom: 20px;
-	opacity: 0;
-	overflow: hidden;
-	transition: all 0.5s linear;
-}
-
-.messages .message.left .avatar {
-	background-color: #f5886e;
-	float: left;
-}
-
-.messages .message.left .text_wrapper {
-	background-color: #ffe6cb;
-	margin-left: 20px;
-}
-
-.messages .message.left .text_wrapper::after, .messages .message.left .text_wrapper::before {
-	border-right-color: #ffe6cb;
-	right: 100%;
-}
-
-.messages .message.left .text {
-	color: #c48843;
-}
-
-.messages .message.right .avatar {
-	background-color: #fdbf68;
-	float: right;
-}
-
-.messages .message.right .text_wrapper {
-	background-color: #c7eafc;
-	float: right;
-	margin-right: 20px;
-}
-
-.messages .message.right .text_wrapper::after, .messages .message.right .text_wrapper::before {
-	border-left-color: #c7eafc;
-	left: 100%;
-}
-
-.messages .message.right .text {
-	color: #45829b;
-}
-
-.messages .message.appeared {
-	opacity: 1;
-}
-
-.messages .message .avatar {
-	border-radius: 50%;
-	display: inline-block;
-	height: 60px;
-	width: 60px;
-}
-
-.messages .message .text_wrapper {
-	border-radius: 6px;
-	display: inline-block;
-	min-width: 100px;
-	padding: 20px;
-	position: relative;
-	width: calc(100% - 85px);
-}
-
-.messages .message .text_wrapper::after, .messages .message .text_wrapper:before {
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	pointer-events: none;
-	position: absolute;
-	top: 18px;
-	width: 0;
-}
-
-.messages .message .text_wrapper::after {
-	border-width: 13px;
-	margin-top: 0;
-}
-
-.messages .message .text_wrapper::before {
-	border-width: 15px;
-	margin-top: -2px;
-}
-
-.messages .message .text_wrapper .text {
-	font-size: 18px;
-	font-weight: 300;
-}
-
 .footer {
 	border-radius: 8px 0 0 0;
 	box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
 	padding: 8px 16px 0;
+}
+
+.when:before {
+	content: "\2015";
+	margin-right: 0.25em;
 }

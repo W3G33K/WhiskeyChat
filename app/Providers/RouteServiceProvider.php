@@ -16,7 +16,7 @@
 		 *
 		 * @var string
 		 */
-		public const HOME = '/home';
+		public const HOME = 'room.general';
 
 		/**
 		 * The controller namespace for the application.
@@ -54,7 +54,7 @@
 		 */
 		protected function configureRateLimiting() {
 			RateLimiter::for('api', function(Request $request) {
-				return Limit::perMinute(60)->by($request->ip());
+				return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
 			});
 		}
 	}

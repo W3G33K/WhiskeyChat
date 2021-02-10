@@ -4,7 +4,7 @@
 	<div class="container m-md-auto mx-sm-auto my-3">
 		<section class="card">
 			<header class="card-header p-3">
-				<h1 class="font-weight-bolder m-0 text-center text-dark small">
+				<h1 class="font-weight-bolder m-0 pb-1 text-center text-dark shadow-lg small">
 					{{ config('app.name', 'WhiskeyChat') }}
 				</h1>
 				<div class="mt-n4 text-right buttons">
@@ -42,13 +42,23 @@
 							(e.g. &quot;<a href="#suggested-nickname">{{ $placeholder }}</a>&quot; works)
 						</em>
 					</p>
-					<form action="{{ route('join-chat') }}" method="post">
+					@if ($errors->any())
+						<div class="alert alert-danger">
+							<ul>
+								@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+								@endforeach
+							</ul>
+						</div>
+					@endif
+					<form action="{{ route('join') }}" method="post">
+						@csrf
 						<div class="form-group">
 							<label for="nickname">Your nickname</label>
 							<em id="interactive-error"
 								class="d-block d-sm-inline font-weight-lighter text-danger small">&nbsp;</em>
 							<input type="text" id="nickname" name="nickname"
-								   class="form-control form-control-lg"
+								   class="form-control form-control-lg" value="{{ old('nickname') }}"
 								   required minlength="3" maxlength="24" pattern="^[\w\._]+$"/>
 							<p id="sizeof-nickname" class="font-weight-light small">&nbsp;</p>
 						</div>
@@ -59,9 +69,9 @@
 				</div>
 			</div>
 
-			<footer class="card-footer p-3 text-muted text-center small">
+			<footer class="card-footer bg-light-gray p-3 text-muted text-center small">
 				<p class="m-0">
-					Copyright &copy; @copyright_datetime <a href="https://github.com/W3G33K">Ryan Clark</a>
+					Copyright &copy; @copyright_datetime <a href="https://github.com/W3G33K">Ryan K. Clark</a>
 				</p>
 			</footer>
 		</section>

@@ -2,13 +2,18 @@
 
 	namespace App\Http;
 
+	use App\Http\Middleware\Authenticate;
 	use App\Http\Middleware\EncryptCookies;
 	use App\Http\Middleware\PreventRequestsDuringMaintenance;
+	use App\Http\Middleware\RedirectIfAuthenticated;
 	use App\Http\Middleware\TrimStrings;
 	use App\Http\Middleware\TrustProxies;
 	use App\Http\Middleware\VerifyCsrfToken;
 	use Fruitcake\Cors\HandleCors;
+	use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
+	use Illuminate\Auth\Middleware\Authorize;
 	use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
+	use Illuminate\Auth\Middleware\RequirePassword;
 	use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 	use Illuminate\Foundation\Http\Kernel as HttpKernel;
 	use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
@@ -50,7 +55,7 @@
 				StartSession::class,
 				// \Illuminate\Session\Middleware\AuthenticateSession::class,
 				ShareErrorsFromSession::class,
-				// \App\Http\Middleware\VerifyCsrfToken::class,
+				VerifyCsrfToken::class,
 				SubstituteBindings::class,
 			],
 
@@ -68,12 +73,12 @@
 		 * @var array
 		 */
 		protected $routeMiddleware = [
-			// 'auth' => \App\Http\Middleware\Authenticate::class,
-			// 'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+			'auth' => Authenticate::class,
+			'auth.basic' => AuthenticateWithBasicAuth::class,
 			'cache.headers' => SetCacheHeaders::class,
-			// 'can' => \Illuminate\Auth\Middleware\Authorize::class,
-			// 'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-			// 'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
+			'can' => Authorize::class,
+			'guest' => RedirectIfAuthenticated::class,
+			'password.confirm' => RequirePassword::class,
 			'signed' => ValidateSignature::class,
 			'throttle' => ThrottleRequests::class,
 			'verified' => EnsureEmailIsVerified::class,

@@ -20,6 +20,7 @@ try {
 	// Globalize commonly used elements for convenience;
 	window.$body = jQuery(body);
 	window.$document = jQuery(document);
+	window.$htmlbody = jQuery('html, body');
 	window.$window = jQuery(window);
 	window.Page = require('./page');
 } catch (e) {
