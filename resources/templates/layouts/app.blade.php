@@ -18,7 +18,7 @@
 
 		<!-- Page Stylesheets: -->
 		@yield('page-stylesheets')
-		<link type="text/css" rel="stylesheet" href="{{ asset('css/app.css') }}"/>
+		<link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}"/>
 		@yield('override-stylesheets')
 	</head>
 
@@ -36,7 +36,7 @@
 		@yield('dom-templates')
 
 		<!-- Body Scripts: -->
-		<script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+		<script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 		@yield('body-scripts')
 	</body>
 </html>

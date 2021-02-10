@@ -96,5 +96,5 @@
 @endsection
 
 @section('body-scripts')
-	<script type="text/javascript" src="{{ asset('js/pages/chat.js') }}"></script>
+	<script type="text/javascript" src="{{ mix('js/pages/chat.js') }}"></script>
 @endsection
