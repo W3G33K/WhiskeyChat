@@ -100,8 +100,11 @@ whiskey.registerPage(function() {
 			this.parent();
 			// @START_WHISKEY_DEBUG
 			console.info('chat-register-events'); // @END_WHISKEY_DEBUG
-			jQuery('button:contains("Send")').on('click', () => page.sendMessage());
-			jQuery('input[name="message"]').on('keyup', (onKeyUpEvent) => page.sendMessage(onKeyUpEvent.keyCode));
+			jQuery('button:contains("Send")').on('click', page.sendMessage);
+			jQuery('input[name="message"]').on('keyup', (onKeyUpEvent) => {
+				(onKeyUpEvent.keyCode === 13) && page.sendMessage();
+			});
+
 			jQuery('a[href="#list-participants"]').on('click', function(onClickEvent) {
 				onClickEvent.preventDefault();
 				page.updateParticipantCount()
@@ -113,15 +116,14 @@ whiskey.registerPage(function() {
 			page.updateParticipantCountIntId = setInterval(page.updateParticipantCount, 60000);
 		},
 
-		sendMessage(keyCode = 13) {
+		sendMessage() {
 			// @START_WHISKEY_DEBUG
 			console.info('send-message'); // @END_WHISKEY_DEBUG
 			const $sendBtn = jQuery('button:contains("Send")');
 			const $message = jQuery('input[name="message"]'),
 				message = _.trimStart($message.val());
 			const isSendBtnDisabled = $sendBtn.prop('disabled');
-			if ((isSendBtnDisabled === false) &&
-				(keyCode === 13 && _.trim(message) !== '')) {
+			if (isSendBtnDisabled === false && _.trimEnd(message) !== '') {
 				$sendBtn.prop('disabled', true);
 				const myRoomIdentifier = jQuery('input[name="room-id"]').val();
 				const myParticipantIdentifier = jQuery('input[name="participant-id"]').val();
