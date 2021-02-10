@@ -25,14 +25,14 @@ whiskey.registerPage(function() {
 					let diff = page.timeDifference(Date.now(), new Date(message.created_at));
 					if (_.eq(myParticipantIdentifier, participant.id) && _.eq(myParticipantNickname, participant.nickname)) {
 						jQuery(`
-							<li class="alert alert-success">
+							<li class="alert alert-success text-break text-wrap">
 								<h6>${participant.nickname}</h6>
 								${message.body}
 								<p class="m-0 text-success small when">${diff}</p>
 							</li>`).appendTo($messagePane);
 					} else {
 						jQuery(`
-							<li class="alert alert-primary">
+							<li class="alert alert-primary text-break text-wrap">
 								<h6>${participant.nickname}</h6>
 								${message.body}
 								<p class="m-0 text-primary small when">${diff}</p>
