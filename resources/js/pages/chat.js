@@ -20,8 +20,9 @@ whiskey.registerPage(function() {
 			const $messagePane = jQuery('#message-pane');
 			page.fetchMessages(function(count, messages) {
 				$messagePane.empty(); // TODO: figure out an offset index for messages instead of constantly re-rendering all of them.
-				for (let message of messages) {
-					let participant = message.sender;
+				for (let index = (messages.length - 1); index >= 0; index--) {
+					let message = messages[index],
+						participant = message.sender;
 					let sentWhenAgo = page.timeDifference(Date.now(), new Date(message.created_at));
 
 					let $message;
@@ -79,7 +80,7 @@ whiskey.registerPage(function() {
 			const myRoomIdentifier = jQuery('input[name="room-id"]').val();
 			const myParticipantIdentifier = jQuery('input[name="participant-id"]').val();
 			const myParticipantType = jQuery('input[name="participant-type"]').val();
-			jQuery.getJSON(`/chat/conversations/${myRoomIdentifier}/messages?participant_id=${myParticipantIdentifier}&participant_type=${myParticipantType}`,
+			jQuery.getJSON(`/chat/conversations/${myRoomIdentifier}/messages?participant_id=${myParticipantIdentifier}&participant_type=${myParticipantType}&sorting=desc`,
 				function(response) {
 					callback.apply(window, [response.total, response.data]);
 				});
