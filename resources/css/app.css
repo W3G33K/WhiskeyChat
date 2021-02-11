@@ -60,6 +60,15 @@ form label:after {
 	padding: 8px 16px 0;
 }
 
+.text-embossed {
+	color: rgba(89, 96, 106, 0.32);
+}
+
+.text-embossed:before, .text-embossed:after {
+	content: "\2015";
+	margin: 0 0.25em;
+}
+
 .when:before {
 	content: "\2015";
 	margin-right: 0.25em;

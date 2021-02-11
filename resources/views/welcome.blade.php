@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('page-title', 'A(n) unsophisticated app for schmoozing sophisticated ladies & gents.')
+
 @section('content')
 	<div class="container m-md-auto mx-sm-auto my-3">
 		<section class="card">
@@ -20,7 +22,7 @@
 				</div>
 				<div class="card-text">
 					<h6>Welcome to {{ config('app.name', 'WhiskeyChat') }}!</h6>
-					<p>&horbar; A(n) app for sophisticated communication app between sophisticated lads and lasses.</p>
+					<p>&horbar; A(n) unsophisticated app for schmoozing sophisticated ladies &amp; gents.</p>
 					<p>
 						Kick back, take a swig of your favorite bourbon <em>(or scotch)</em>,
 						and put your thinking cap on. Imagine a sophisticated nickname,
@@ -72,6 +74,9 @@
 			<footer class="card-footer bg-light-gray p-3 text-muted text-center small">
 				<p class="m-0">
 					Copyright &copy; @copyright_datetime <a href="https://github.com/W3G33K">Ryan K. Clark</a>
+				</p>
+				<p class="m-0">
+					<small class="text-embossed">Version: @app_version</small>
 				</p>
 			</footer>
 		</section>
