@@ -73,10 +73,17 @@
 
 			<footer class="card-footer bg-light-gray p-3 text-muted text-center small">
 				<p class="m-0">
-					Copyright &copy; @copyright_datetime <a href="https://github.com/W3G33K">Ryan K. Clark</a>
+					Copyright &copy; @copyright_datetime <a href="https://github.com/W3G33K" title="">Ryan Clark</a>
 				</p>
 				<p class="m-0">
-					<small class="text-embossed">Version: @app_version</small>
+					<small>Meticulously-crafted with &hearts; using modern web technologies, Whiskeybox and the Laravel framework.</small>
+				</p>
+				<p class="m-0">
+					<small class="text-embossed">
+						<a href="https://github.com/W3G33K/WhiskeyChat" title="Contribute to WhiskeyChat via Github">
+							Contribute
+						</a>
+					</small>
 				</p>
 			</footer>
 		</section>

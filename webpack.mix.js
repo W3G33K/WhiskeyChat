@@ -1,8 +1,8 @@
-const mix = require('laravel-mix');
-const env = process.env;
+let mix = require('laravel-mix'),
+	env = process.env;
 
-const productionSourceMaps = false;
-const publicPath = './public';
+const PUBLIC_DIR = './public';
+const USE_PRODUCTION_SRC_MAPS = false;
 
 /*
  |--------------------------------------------------------------------------
@@ -15,12 +15,20 @@ const publicPath = './public';
  |
  */
 
+require('laravel-mix-polyfill');
+
 mix.js('./resources/js/app.js', 'js')
 	.js('./resources/js/pages/chat.js', 'js/pages')
 	.js('./resources/js/pages/user.js', 'js/pages')
 	.css('./resources/css/app.css', 'css')
-	.setPublicPath(publicPath)
-	.sourceMaps(productionSourceMaps, 'source-map');
+	.setPublicPath(PUBLIC_DIR)
+	.sourceMaps(USE_PRODUCTION_SRC_MAPS, 'source-map')
+	.polyfill({
+		enabled: true,
+		useBuiltIns: "usage",
+		targets: "firefox 50, IE 11"
+	});
+
 if (mix.inProduction() && env.APP_DEBUG === "false") {
 	mix.version();
 	mix.webpackConfig({

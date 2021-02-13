@@ -73,3 +73,14 @@ form label:after {
 	content: "\2015";
 	margin-right: 0.25em;
 }
+
+/* Specific IE11 CSS Styles (to auto-center main element on welcome page) */
+@media all and (min-width: 769px) and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.welcome .d-flex {
+		transform: translate(0, 18%);
+	}
+
+	.welcome .min-vh-100 {
+		min-height: auto !important;
+	}
+}

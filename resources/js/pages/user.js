@@ -4,6 +4,7 @@ whiskey.registerPage(function() {
 			this.parent();
 			// @START_WHISKEY_DEBUG
 			console.info('user-ready'); // @END_WHISKEY_DEBUG
+			$body.addClass('welcome');
 			page.validateNickname(true);
 		},
 

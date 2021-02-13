@@ -1,4 +1,11 @@
-const body = document.body;
+import jQuery from 'jquery';
+import underscore from 'lodash';
+import Popper from 'popper.js';
+import bootstrap from 'bootstrap';
+import Class from './ext-lib/inheritance-2.7';
+import Page from './page';
+
+let body = document.body;
 
 window.whiskey = {};
 whiskey.registerPage = (function(pRegisterInvokable) {
@@ -11,18 +18,19 @@ whiskey.registerPage = (function(pRegisterInvokable) {
 });
 
 try {
-	window.Class = require('./ext-lib/inheritance-2.7');
-	window.$ = window.jQuery = require('jquery');
-	window._ = require('lodash');
-	window.Popper = require('popper.js');
-	require('bootstrap');
+	window.Class = Class;
+	window.$ = window.jQuery = jQuery;
+	window._ = underscore;
+	window.Popper = Popper;
+	window.bootstrap = bootstrap;
+	console.log( bootstrap );
 
 	// Globalize commonly used elements for convenience;
 	window.$body = jQuery(body);
 	window.$document = jQuery(document);
 	window.$htmlbody = jQuery('html, body');
 	window.$window = jQuery(window);
-	window.Page = require('./page');
+	window.Page = Page.getClass();
 } catch (e) {
 	while (body.firstChild) {
 		body.removeChild(body.lastChild);
