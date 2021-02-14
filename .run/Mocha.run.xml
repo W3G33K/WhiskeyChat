@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run" type="mocha-javascript-test-runner">
+    <node-interpreter>project</node-interpreter>
+    <node-options />
+    <mocha-package>$PROJECT_DIR$/node_modules/mochapack</mocha-package>
+    <working-directory>$PROJECT_DIR$</working-directory>
+    <pass-parent-env>true</pass-parent-env>
+    <ui>bdd</ui>
+    <extra-mocha-options>--webpack-config=node_modules/laravel-mix/setup/webpack.config.js --require tests/Client/setup.js tests/Client/**/*.spec.js</extra-mocha-options>
+    <test-kind>PATTERN</test-kind>
+    <test-pattern />
+    <method v="2" />
+  </configuration>
+</component>
