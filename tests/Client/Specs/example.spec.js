@@ -18,10 +18,16 @@ describe('Example', () => {
 		expect(_body.textContent).toEqual('Hello, world!');
 	});
 
-	it('says Greet should render "Hello, Mari!" when Mari is provided as user', () => {
+	it('says Greet should render "Hello, Mari!" when "Mari" is provided as user', () => {
 		let greeter = new Greet('Mari');
 		greeter.greet();
 		expect(_body.textContent).toEqual('Hello, Mari!');
+	});
+
+	it('says Greet should render "Hello, Todd Howard!" when "Todd Howard" is provided as user', () => {
+		let greeter = new Greet('Todd Howard');
+		greeter.greet();
+		expect(_body.textContent).toEqual('Hello, Todd Howard!');
 	});
 
 	it('says Greet should render "Hello, world!" when `undefined` is provided as user', () => {
