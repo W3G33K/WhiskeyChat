@@ -37,7 +37,7 @@ describe('Example', () => {
 	});
 
 	it('says Greet should render "Hello, world!" when any non-string is provided as user', () => {
-		let nonStrings = [{foo: 'bar'}, true, 123, ((a, b) => a + b)];
+		let nonStrings = [{foo: 'bar'}, true, 123, ((a, b) => a + b), [0.32, 0.64, 0.48]];
 		for (let nonString of nonStrings) {
 			let greeter = new Greet(nonString);
 			greeter.greet();
