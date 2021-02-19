@@ -471,22 +471,19 @@ describe('ChatPage', () => {
 	});
 
 	it('says no messages should be displayed after fetch response yields `0` messages', () => {
-		let response = {
-			total: 0,
-			data: []
-		}
+		let response = [];
 
 		let jqInitSpy = sandbox.spy(jQuery.fn, 'init');
-		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
-			jqTextStub = sandbox.stub(jQuery.fn, 'text'),
+		let jqTextStub = sandbox.stub(jQuery.fn, 'text'),
 			jqValueStub = sandbox.stub(jQuery.fn, 'val');
 		jqValueStub.onFirstCall()
 			.returns('1');
-		jqValueStub.onFirstCall()
+		jqValueStub.onSecondCall()
 			.returns('jenna.foxx');
-		jqAjaxStub.yieldsTo('success', response);
 
 		let chat = new Chat(jQuery, lodash);
+		sandbox.stub(chat, 'fetchMessages')
+			.callsArgWith(0, jQuery, 0, response);
 		chat.displayMessages();
 
 		expect(jqTextStub.calledOnce).to.equal(false);
@@ -498,41 +495,38 @@ describe('ChatPage', () => {
 	});
 
 	it('says all messages should be displayed after fetch response yields `1` message', () => {
-		let response = {
-			total: 1,
-			data: [
-				{
-					body: 'You all know who I am. ;)',
-					sender: {
-						id: 1,
-						nickname: 'jenna.foxx'
-					},
+		let response = [
+			{
+				body: 'You all know who I am. ;)',
+				sender: {
+					id: 1,
+					nickname: 'jenna.foxx'
 				},
-			]
-		}
+			},
+		];
 
 		let jqInitSpy = sandbox.spy(jQuery.fn, 'init');
-		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
-			jqTextStub = sandbox.stub(jQuery.fn, 'text'),
+		let jqTextStub = sandbox.stub(jQuery.fn, 'text'),
 			jqValueStub = sandbox.stub(jQuery.fn, 'val');
 		jqValueStub.onFirstCall()
 			.returns('1');
-		jqValueStub.onFirstCall()
+		jqValueStub.onSecondCall()
 			.returns('jenna.foxx');
-		jqAjaxStub.yieldsTo('success', response);
 		sandbox.stub(jQuery.fn, 'appendTo')
 			.returnsThis();
 
 		let chat = new Chat(jQuery, lodash);
+		sandbox.stub(chat, 'fetchMessages')
+			.callsArgWith(0, jQuery, 1, response);
 		sandbox.stub(chat, 'timeDifference')
-			.returns('2 seconds ago');
+			.returns('fing');
 		chat.displayMessages();
 
 		expect(jqTextStub.calledOnceWithExactly('You all know who I am. ;)')).to.equal(true);
 
 		// verify .message element creation
-		let expectedElement = '<li class="alert alert-primary text-break text-wrap"><h6>jenna.foxx</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-primary small when">2 seconds ago</p></li>';
-		let notExpectedElement = '<li class="alert alert-success text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">2 seconds ago</p></li>';
+		let expectedElement = '<li class="alert alert-success text-break text-wrap"><h6>jenna.foxx</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">fing</p></li>';
+		let notExpectedElement = '<li class="alert alert-success text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">fing</p></li>';
 		let args = flatten(jqInitSpy.args).filter(arg => (typeof arg === 'string')).map(arg => arg.replace(/(>?)\s+(<)/g, '$1$2'));
 		expect(args, 'should contain expected message element').to.contain(expectedElement);
 		expect(args, 'should not contain message').not.to.contain(notExpectedElement);
@@ -570,16 +564,16 @@ describe('ChatPage', () => {
 		sandbox.stub(chat, 'fetchMessages')
 			.callsArgWith(0, jQuery, 2, response);
 		sandbox.stub(chat, 'timeDifference')
-			.returns('2 seconds ago');
+			.returns('fang');
 		chat.displayMessages();
 
 		expect(jqTextStub.calledWithExactly('You all know who I am. ;)')).to.equal(true);
 		expect(jqTextStub.calledWithExactly('It just works!')).to.equal(true);
 
 		// verify .message element creation
-		let expectedElement2 = '<li class="alert alert-primary text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-primary small when">2 seconds ago</p></li>';
-		let expectedElement1 = '<li class="alert alert-success text-break text-wrap"><h6>jenna.foxx</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">2 seconds ago</p></li>';
-		let notExpectedElement = '<li class="alert alert-success text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">2 seconds ago</p></li>';
+		let expectedElement2 = '<li class="alert alert-primary text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-primary small when">fang</p></li>';
+		let expectedElement1 = '<li class="alert alert-success text-break text-wrap"><h6>jenna.foxx</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">fang</p></li>';
+		let notExpectedElement = '<li class="alert alert-success text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">fang</p></li>';
 		let args = flatten(jqInitSpy.args).filter(arg => (typeof arg === 'string')).map(arg => arg.replace(/(>?)\s+(<)/g, '$1$2'));
 		expect(args, 'should contain expected message element (alert-primary)').to.contain(expectedElement2);
 		expect(args, 'should contain expected message element (alert-success)').to.contain(expectedElement1);
@@ -639,7 +633,7 @@ describe('ChatPage', () => {
 		sandbox.stub(chat, 'fetchMessages')
 			.callsArgWith(0, jQuery, 5, response);
 		sandbox.stub(chat, 'timeDifference')
-			.returns('2 seconds ago');
+			.returns('foom');
 		chat.displayMessages();
 
 		expect(jqTextStub.calledWithExactly('You all know who I am. ;)')).to.equal(true);
@@ -649,10 +643,10 @@ describe('ChatPage', () => {
 		expect(jqTextStub.calledWithExactly('Sweet little lies.')).to.equal(true);
 
 		// verify .message element creation
-		let expectedElement3 = '<li class="alert alert-primary text-break text-wrap"><h6>black_panther</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-primary small when">2 seconds ago</p></li>';
-		let expectedElement2 = '<li class="alert alert-primary text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-primary small when">2 seconds ago</p></li>';
-		let expectedElement1 = '<li class="alert alert-success text-break text-wrap"><h6>jenna.foxx</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">2 seconds ago</p></li>';
-		let notExpectedElement = '<li class="alert alert-success text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">2 seconds ago</p></li>';
+		let expectedElement3 = '<li class="alert alert-primary text-break text-wrap"><h6>black_panther</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-primary small when">foom</p></li>';
+		let expectedElement2 = '<li class="alert alert-primary text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-primary small when">foom</p></li>';
+		let expectedElement1 = '<li class="alert alert-success text-break text-wrap"><h6>jenna.foxx</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">foom</p></li>';
+		let notExpectedElement = '<li class="alert alert-success text-break text-wrap"><h6>todd.howard</h6><p class="alert-body">&nbsp;</p><p class="m-0 text-success small when">foom</p></li>';
 		let args = flatten(jqInitSpy.args).filter(arg => (typeof arg === 'string')).map(arg => arg.replace(/(>?)\s+(<)/g, '$1$2'));
 		expect(args, 'should contain expected message element (alert-primary)').to.contain(expectedElement3);
 		expect(args, 'should contain expected message element (alert-primary)').to.contain(expectedElement2);
