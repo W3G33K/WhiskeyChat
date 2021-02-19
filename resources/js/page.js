@@ -1,27 +1,30 @@
-function getClass() {
-	return Class.create({
-		compose() {
-			// @START_WHISKEY_DEBUG
-			console.info('page-ready'); // @END_WHISKEY_DEBUG
-			$body.removeClass('invisible');
-			page.registerEvents();
-		},
+class Page {
+	static module(PageController) {
+		window[PageController.name] = PageController;
+		return PageController;
+	}
 
-		dispose() {
-			// @START_WHISKEY_DEBUG
-			console.info('page-dispose'); // @END_WHISKEY_DEBUG
-		},
+	constructor(jQuery = null, lodash = null) {
+		this.jQuery = jQuery;
+		this.lodash = lodash;
+		this.initialize();
+	}
 
-		initialize() {
-			// @START_WHISKEY_DEBUG
-			console.info('page-initialize'); // @END_WHISKEY_DEBUG
-		},
+	compose() {
+		this.registerEvents();
+		let $ = this.resolve('jQuery');
+		$('body').removeClass('invisible');
+	}
 
-		registerEvents() {
-			// @START_WHISKEY_DEBUG
-			console.info('page-register-events'); // @END_WHISKEY_DEBUG
-		}
-	});
+	dispose() {}
+
+	initialize() {}
+
+	registerEvents() {}
+
+	resolve(dependency) {
+		return (window[dependency] ?? this[dependency]);
+	}
 }
 
-export default {getClass};
+export default Page;

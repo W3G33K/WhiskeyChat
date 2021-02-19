@@ -1,81 +1,79 @@
-whiskey.registerPage(function() {
-	window.Page = Class.extend(Page, {
-		compose() {
-			this.parent();
-			// @START_WHISKEY_DEBUG
-			console.info('user-ready'); // @END_WHISKEY_DEBUG
-			$body.addClass('welcome');
-			page.validateNickname(true);
-		},
+import Page from "../page";
 
-		registerEvents() {
-			this.parent();
-			jQuery('input[name="nickname"]')
-				.on('blur', page.trimWhitespace)
-				.on('change', page.validateNickname)
-				.on('keyup', page.validateNickname);
-			jQuery('a[href="#suggested-nickname"]').on('click', function(onClickEvent) {
-				onClickEvent.preventDefault();
-				return page.selectNickname(this.textContent);
-			});
-		},
+class User extends Page {
+	initialize() {
+		super.initialize();
+		let jQuery = this.resolve('jQuery');
+		jQuery('body').addClass('welcome');
+		this.validateNickname(true);
+	}
 
-		selectNickname(suggestedNickname) {
-			jQuery('input[name="nickname"]')
-				.val(suggestedNickname)
-				.trigger('focus')
-				.trigger('change');
-		},
+	registerEvents() {
+		super.registerEvents();
+		let $ = this.resolve('jQuery');
+		$('input[name="nickname"]')
+			.on('blur', (blurEvent => this.trimWhitespace(blurEvent)))
+			.on('change', (changeEvent => this.validateNickname(changeEvent)))
+			.on('keyup', (keyUpEvent => this.validateNickname(keyUpEvent)));
+		$('a[href="#suggested-nickname"]').on('click', mouseEvent => this.selectNickname(mouseEvent));
+	}
 
-		trimWhitespace() {
-			this.value = _.trim(this.value);
-		},
+	selectNickname(mouseEvent) {
+		mouseEvent.preventDefault();
+		let $ = this.resolve('jQuery'),
+			target = mouseEvent.target;
+		$('input[name="nickname"]')
+			.val(target.textContent)
+			.trigger('focus')
+			.trigger('change');
+	}
 
-		validateNickname(onCompose) {
-			// @START_WHISKEY_DEBUG
-			console.info('validate-nickname'); // @END_WHISKEY_DEBUG
-			let $joinChatButton = jQuery('button:contains("Join Chat")');
-			$joinChatButton.prop('disabled', true);
-			if (onCompose !== true) {
-				let $nickname = jQuery('input[name="nickname"]'),
-					maxlength = $nickname.attr('maxlength'),
-					minlength = $nickname.attr('minlength'),
-					pattern = $nickname.attr('pattern'),
-					value = _.trim($nickname.val()),
-					length = value.length;
-				let $size = jQuery('#sizeof-nickname');
-				$size.text(`${length}/24`);
+	trimWhitespace(blurEvent) {
+		let lodash = this.resolve('lodash');
+		let target = blurEvent.target;
+		target.value = lodash.trim(target.value);
+	}
 
-				let hasValidValue = false;
-				let $errorMessage = jQuery('#interactive-error');
-				if (length >= minlength && length <= maxlength) {
-					$size.removeClass('text-danger')
-						.addClass('text-success');
-					hasValidValue = true;
-				} else {
-					$size.removeClass('text-success')
-						.addClass('text-danger');
-					if (length <= maxlength) {
-						$errorMessage.text(`Has too few characters.`);
-					} else {
-						$errorMessage.text(`Has too many characters.`);
-					}
-				}
+	validateNickname(onInitialize) {
+		let jQuery = this.resolve('jQuery');
+		let joinChatButton = jQuery('button:contains("Join Chat")');
+		joinChatButton.prop('disabled', true);
+		if (onInitialize !== true) {
+			let lodash = this.resolve('lodash');
+			let nickname = jQuery('input[name="nickname"]');
+			let maxlength = nickname.attr('maxlength');
+			let minlength = nickname.attr('minlength');
+			let pattern = nickname.attr('pattern');
+			let value = lodash.trim(nickname.val());
+			let length = value.length;
+			let sizeWidget = jQuery('#sizeof-nickname');
+			sizeWidget.text(`${length}/24`);
 
-				let regex = new RegExp(pattern, 'gi');
-				if (regex.test(value) === false) {
-					$errorMessage.text(`Must contain only letters, numbers, dots and underscores.`);
-					hasValidValue = false;
+			let errorMessage = null;
+			let isLegal = true;
+			let legalRegex = new RegExp(pattern, 'gi');
+			if (length < minlength) {
+				errorMessage = 'Has too few characters.';
+				isLegal = false;
+			} else if (length > maxlength) {
+				errorMessage = 'Has too many characters.';
+				isLegal = false;
+			} else if (legalRegex.test(value) === false) {
+				errorMessage = 'Must contain only letters, numbers, dots and underscores.';
+				isLegal = false;
+			}
 
-				}
-
-				if (hasValidValue) {
-					$errorMessage.text(null);
-					$joinChatButton.prop('disabled', false);
-				}
+			jQuery('#interactive-error').text(errorMessage);
+			if (isLegal) {
+				sizeWidget.removeClass('text-danger')
+					.addClass('text-success');
+				joinChatButton.prop('disabled', false);
+			} else {
+				sizeWidget.removeClass('text-success')
+					.addClass('text-danger');
 			}
 		}
-	});
+	}
+}
 
-	return $window;
-});
+export default Page.module(User);

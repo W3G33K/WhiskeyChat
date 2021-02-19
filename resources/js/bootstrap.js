@@ -1,37 +1,31 @@
 import jQuery from 'jquery';
-import underscore from 'lodash';
+import lodash from 'lodash';
 import Popper from 'popper.js';
 import bootstrap from 'bootstrap';
-import Class from './ext-lib/inheritance-2.7';
-import Page from './page';
-
-let body = document.body;
-
-window.whiskey = {};
-whiskey.registerPage = (function(pRegisterInvokable) {
-	if (typeof pRegisterInvokable !== 'function') {
-		throw new TypeError('Invokable page registree was expected but not received.');
-	}
-
-	let $window = pRegisterInvokable.apply(window);
-	$window.trigger('whiskey.kickoff');
-});
+import Page from "./page";
 
 try {
-	window.Class = Class;
 	window.$ = window.jQuery = jQuery;
-	window._ = underscore;
+	window._ = window.lodash = lodash;
 	window.Popper = Popper;
 	window.bootstrap = bootstrap;
-	console.log( bootstrap );
 
 	// Globalize commonly used elements for convenience;
-	window.$body = jQuery(body);
 	window.$document = jQuery(document);
-	window.$htmlbody = jQuery('html, body');
+	window.$htmlbody = jQuery('html,body');
+	window.$body = jQuery('body');
 	window.$window = jQuery(window);
-	window.Page = Page.getClass();
+
+	let pageKey = jQuery('script[data-page]').data('page');
+	let PageController = (window[pageKey] ?? Page);
+	if (PageController.__proto__.name === Page.name || PageController.name === Page.name) {
+		let page = new PageController();
+		$document.ready((documentEvent => page.compose(documentEvent)));
+		$window.on('beforeunload', (windowEvent => page.dispose(windowEvent)));
+		$window.on('unload', (windowEvent => page.dispose(windowEvent)));
+	}
 } catch (e) {
+	let body = document.body;
 	while (body.firstChild) {
 		body.removeChild(body.lastChild);
 	}
@@ -86,6 +80,5 @@ try {
 	classList.splice(invisiClassIndex, 1);
 	body.setAttribute('class', classList.join(' '));
 	console.error(`WhiskeyChat failed to initialized during bootstrapping process: ${e.message}`);
-
 	throw e;
 }

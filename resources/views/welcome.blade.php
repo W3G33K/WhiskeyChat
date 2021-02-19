@@ -91,5 +91,5 @@
 @endsection
 
 @section('body-scripts')
-	<script type="text/javascript" src="{{ mix('js/pages/user.js') }}"></script>
+	<script type="text/javascript" src="{{ mix('js/pages/user.js') }}" data-page="User"></script>
 @endsection
