@@ -5,7 +5,7 @@ import sinon from 'sinon';
 
 import jQuery from 'jquery';
 import lodash from 'lodash';
-import 'bootstrap/js/src/modal';
+import modal from 'bootstrap/js/src/modal';
 
 describe('ChatPage', () => {
 	let sandbox = sinon.createSandbox();
@@ -51,7 +51,7 @@ describe('ChatPage', () => {
 	it('says all participants should be fetched after response yields `1` participants in room', () => {
 		let participant = {
 			id: 1,
-			nickname: 'jenna.foxx'
+			nickname: 'jenna.foxx',
 		};
 
 		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
@@ -70,23 +70,23 @@ describe('ChatPage', () => {
 		let participants = [
 			{
 				id: 1,
-				nickname: 'jenna.foxx'
+				nickname: 'jenna.foxx',
 			},
 			{
 				id: 2,
-				nickname: 'todd.howard'
+				nickname: 'todd.howard',
 			},
 			{
 				id: 3,
-				nickname: 'Ellament'
+				nickname: 'Ellament',
 			},
 			{
 				id: 4,
-				nickname: 'whiskerye'
+				nickname: 'whiskerye',
 			},
 			{
 				id: 5,
-				nickname: 'Mari_'
+				nickname: 'Mari_',
 			},
 		];
 
@@ -110,23 +110,23 @@ describe('ChatPage', () => {
 		let participants = [
 			{
 				id: 1,
-				nickname: 'jenna.foxx'
+				nickname: 'jenna.foxx',
 			},
 			{
 				id: 2,
-				nickname: 'todd.howard'
+				nickname: 'todd.howard',
 			},
 			{
 				id: 3,
-				nickname: 'Ellament'
+				nickname: 'Ellament',
 			},
 			{
 				id: 4,
-				nickname: 'whiskerye'
+				nickname: 'whiskerye',
 			},
 			{
 				id: 5,
-				nickname: 'Mari_'
+				nickname: 'Mari_',
 			},
 		];
 
@@ -159,7 +159,7 @@ describe('ChatPage', () => {
 		let participants = [
 			{
 				id: 1,
-				nickname: 'jenna.foxx'
+				nickname: 'jenna.foxx',
 			},
 		];
 
@@ -180,23 +180,23 @@ describe('ChatPage', () => {
 		let participants = [
 			{
 				id: 1,
-				nickname: 'jenna.foxx'
+				nickname: 'jenna.foxx',
 			},
 			{
 				id: 2,
-				nickname: 'todd.howard'
+				nickname: 'todd.howard',
 			},
 			{
 				id: 3,
-				nickname: 'Ellament'
+				nickname: 'Ellament',
 			},
 			{
 				id: 4,
-				nickname: 'whiskerye'
+				nickname: 'whiskerye',
 			},
 			{
 				id: 5,
-				nickname: 'Mari_'
+				nickname: 'Mari_',
 			},
 		];
 
@@ -360,8 +360,8 @@ describe('ChatPage', () => {
 	it('says messages are fetched after response yields `0` messages', () => {
 		let response = {
 			total: 0,
-			data: []
-		}
+			data: [],
+		};
 
 		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
 			successStub = sandbox.stub();
@@ -377,10 +377,10 @@ describe('ChatPage', () => {
 			total: 1,
 			data: [
 				{
-					body: 'Hello, world!'
+					body: 'Hello, world!',
 				},
-			]
-		}
+			],
+		};
 
 		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
 			successStub = sandbox.stub();
@@ -396,22 +396,22 @@ describe('ChatPage', () => {
 			total: 5,
 			data: [
 				{
-					body: 'Hello, world!'
+					body: 'Hello, world!',
 				},
 				{
-					body: 'It just works!'
+					body: 'It just works!',
 				},
 				{
-					body: 'Sixteen times the detail!'
+					body: 'Sixteen times the detail!',
 				},
 				{
-					body: 'See that mountain over there? You can climb it!'
+					body: 'See that mountain over there? You can climb it!',
 				},
 				{
-					body: 'That glows in the fecking dark!'
+					body: 'That glows in the fecking dark!',
 				},
-			]
-		}
+			],
+		};
 
 		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
 			successStub = sandbox.stub();
@@ -500,7 +500,7 @@ describe('ChatPage', () => {
 				body: 'You all know who I am. ;)',
 				sender: {
 					id: 1,
-					nickname: 'jenna.foxx'
+					nickname: 'jenna.foxx',
 				},
 			},
 		];
@@ -538,15 +538,15 @@ describe('ChatPage', () => {
 				body: 'You all know who I am. ;)',
 				sender: {
 					id: 1,
-					nickname: 'jenna.foxx'
-				}
+					nickname: 'jenna.foxx',
+				},
 			},
 			{
 				body: 'It just works!',
 				sender: {
 					id: 2,
-					nickname: 'todd.howard'
-				}
+					nickname: 'todd.howard',
+				},
 			},
 		];
 
@@ -586,36 +586,36 @@ describe('ChatPage', () => {
 				body: 'You all know who I am. ;)',
 				sender: {
 					id: 1,
-					nickname: 'jenna.foxx'
-				}
+					nickname: 'jenna.foxx',
+				},
 			},
 			{
 				body: 'It just works!',
 				sender: {
 					id: 2,
-					nickname: 'todd.howard'
-				}
+					nickname: 'todd.howard',
+				},
 			},
 			{
 				body: 'Wakanda Forever!!!',
 				sender: {
 					id: 3,
-					nickname: 'black_panther'
-				}
+					nickname: 'black_panther',
+				},
 			},
 			{
 				body: 'Wakanda Forever!!!!!!!!!',
 				sender: {
 					id: 3,
-					nickname: 'black_panther'
-				}
+					nickname: 'black_panther',
+				},
 			},
 			{
 				body: 'Sweet little lies.',
 				sender: {
 					id: 2,
-					nickname: 'todd.howard'
-				}
+					nickname: 'todd.howard',
+				},
 			},
 		];
 
@@ -652,5 +652,97 @@ describe('ChatPage', () => {
 		expect(args, 'should contain expected message element (alert-primary)').to.contain(expectedElement2);
 		expect(args, 'should contain expected message element (alert-success)').to.contain(expectedElement1);
 		expect(args, 'should not contain message').not.to.contain(notExpectedElement);
+	});
+
+	it('says despite response having paginated results only `25` messages should displayed at a time', () => {
+		let response = {
+			total: 30,
+			data: [
+				{
+					body: 'Little one, it’s a simple calculus. This universe is finite, its resources, finite. If life is left unchecked, life will cease to exist. It needs correcting.',
+				}, // 1
+				{
+					body: 'When I’m done, half of humanity will still exist. Perfectly balanced, as all things should be. I hope they remember you.',
+				}, // 2
+				{
+					body: 'You should choose your words wisely.',
+				}, // 3
+				{
+					body: 'I finally rest, and watch the sun rise on a grateful universe. The hardest choices require the strongest wills.',
+				}, // 4
+				{
+					body: 'I will shred this universe down to it’s last atom and then, with the stones you’ve collected for me, create a new one. It is not what is lost but only what it is been given... a grateful universe.',
+				}, // 5
+				{
+					body: 'In my heart, I knew you still cared. But one ever knows for sure. Reality is often disappointing.',
+				}, // 6
+				{
+					body: 'In all my years of conquest, violence, slaughter, it was never personal. But I’ll tell you now, what I’m about to do to your stubborn, annoying little planet... I’m gonna enjoy it. Very, very much.',
+				}, // 7
+				{
+					body: 'You’re strong. But I could snap my fingers, and you’d all cease to exist.',
+				}, // 8
+				{
+					body: 'You’re strong. Me... You’re generous. Me... But I never taught you to lie. That’s why you’re so bad at it. Where is the Soul Stone?',
+				}, // 9
+				{
+					body: 'Today, I lost more than you can know. But now is no time to mourn. Now is no time at all.',
+				}, // 10
+				{
+					body: 'I know what it’s like to lose. To feel so desperately that you’re right, yet to fail nonetheless.',
+				}, // 11
+				{
+					body: 'I would death to imprisonment! Pride: my one fatal flaw',
+				}, // 12
+				{
+					body: 'Dread it. Run from it. Destiny still arrives. Or should I say, I have.',
+				}, // 13
+				{
+					body: 'Your politics bore me. Your demeanor is that of a pouty child. Return me again empty-handed... And I will bathe the stairways in your blood.',
+				}, // 14
+				{
+					body: 'I ignored my destiny once, I can not do that again. Even for you. I’m sorry Little one.',
+				}, // 15
+				{
+					body: 'Look. Pretty, isn’t it? Perfectly balanced. As all things should be.',
+				}, // 16
+				{
+					body: 'Fun isn’t something one considers when balancing the universe. But this... does put a smile on my face.',
+				}, // 17
+				{
+					body: 'You’re a great fighter, Gamora. Come. Let me help you.',
+				}, // 18
+				{
+					body: 'Destiny waits for no man. Not even one who shall bring the universe to its knees.',
+				}, // 19
+				{
+					body: 'At random. Dispassionate, fair. The rich and poor alike. And they called me a madman. And what I predicted, came to pass.',
+				}, // 20
+				{
+					body: 'The work is done. I won. What I’m about to do, I’m gonna enjoy it. Very, very much!',
+				}, // 21
+				{
+					body: 'I did not ask for your trust. I demand only your obedience.',
+				}, // 22
+				{
+					body: 'I’m the only one who knows that. At least I’m the only who has the will to act on it. For a time, you had that same will. As you fought by my side, daughter.',
+				}, // 23
+				{
+					body: 'Your optimism is misplaced, Asgardian.',
+				}, // 24
+				{
+					body: 'I thought by eliminating half of life, the other half would thrive, but you have shown me... that’s impossible. As long as there are those that remember what was, there will always be those, that are unable to accept what can be. They will resist.',
+				}, // 25
+			],
+		};
+
+		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
+			successStub = sandbox.stub();
+		jqAjaxStub.yieldsTo('success', response);
+
+		let chat = new Chat(jQuery, lodash);
+		chat.fetchMessages(successStub);
+
+		expect(successStub.calledOnceWithExactly(jQuery, 25, response.data)).to.equal(true);
 	});
 });

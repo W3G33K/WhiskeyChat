@@ -82,7 +82,7 @@ class Chat extends Page {
 		jQuery.getJSON(
 			`/chat/conversations/${myRoomIdentifier}/messages?participant_id=${myParticipantIdentifier}&participant_type=${myParticipantType}&sorting=desc`,
 			function(response) {
-				callback.apply(this, [jQuery, response.total, response.data]);
+				callback.apply(this, [jQuery, Math.min(response.total, 25), response.data]);
 			});
 	}
 
