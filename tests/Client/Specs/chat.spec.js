@@ -8,10 +8,11 @@ import lodash from 'lodash';
 import modal from 'bootstrap/js/src/modal';
 
 describe('ChatPage', () => {
-	let sandbox = sinon.createSandbox();
+	let timer = null,
+		sandbox = sinon.createSandbox();
 
 	beforeEach('setup fake timers', () => {
-		sandbox.useFakeTimers();
+		timer = sandbox.useFakeTimers();
 	});
 
 	afterEach('cleanup and reset', () => {
@@ -744,5 +745,148 @@ describe('ChatPage', () => {
 		chat.fetchMessages(successStub);
 
 		expect(successStub.calledOnceWithExactly(jQuery, 25, response.data)).to.equal(true);
+	});
+
+	it('says participant typing should be posted to server', () => {
+		let jqAjaxStub = sandbox.stub(jQuery, 'ajax');
+		let chat = new Chat(jQuery, lodash);
+
+		expect(chat.participantIsTyping, 'should be false by default').to.equal(false);
+		chat.postParticipantIsTyping(true);
+		expect(chat.participantIsTyping, 'should now be true').to.equal(true);
+
+		// verify AJAX POST
+		expect(jqAjaxStub.calledOnce, 'post participant is typing').to.equal(true);
+
+		let args = flatten(jqAjaxStub.args).shift();
+		expect(args).to.have.property('url', '/users/typing');
+		expect(args).to.have.property('type', 'post');
+		expect(args).to.have.nested.property('data.is_typing', 1);
+	});
+
+	it('says participant not typing should be posted to server', () => {
+		let jqAjaxStub = sandbox.stub(jQuery, 'ajax');
+		let chat = new Chat(jQuery, lodash);
+
+		expect(chat.participantIsTyping, 'should be false by default').to.equal(false);
+		chat.postParticipantIsTyping(false);
+		expect(chat.participantIsTyping, 'should still be false').to.equal(false);
+
+		// verify AJAX POST
+		expect(jqAjaxStub.calledOnce, 'post participant is (not) typing').to.equal(true);
+
+		let args = flatten(jqAjaxStub.args).shift();
+		expect(args).to.have.property('url', '/users/typing');
+		expect(args).to.have.property('type', 'post');
+		expect(args).to.have.nested.property('data.is_typing', 0);
+	});
+
+	it('says display default placeholder text no participants are presently typing', () => {
+		let jqAttrSpy = sandbox.spy(jQuery.fn, 'attr');
+		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
+			jqValueStub = sandbox.stub(jQuery.fn, 'val');
+		let chat = new Chat(jQuery, lodash);
+
+		jqValueStub.onFirstCall()
+			.returns('ed.boon');
+		jqAjaxStub.yieldsTo('success', []);
+		chat.displayParticipantsTyping();
+		expect(jqAttrSpy.calledOnceWithExactly('placeholder', 'ed.boon: Say hello to your fellows ...'));
+
+		// verify AJAX GET
+		expect(jqAjaxStub.calledOnce, 'fetch participants who are presently typing').to.equal(true);
+
+		let args = flatten(jqAjaxStub.args).shift();
+		expect(args).to.have.property('url', '/users/typing');
+		expect(args).to.have.property('type', 'get');
+	});
+
+	it('says display default placeholder text you are the only participant presently typing', () => {
+		let jqAttrSpy = sandbox.spy(jQuery.fn, 'attr');
+		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
+			jqValueStub = sandbox.stub(jQuery.fn, 'val');
+		let chat = new Chat(jQuery, lodash);
+
+		jqValueStub.onFirstCall()
+			.returns('ed.boon');
+		jqAjaxStub.yieldsTo('success', ['ed.boon']);
+		chat.displayParticipantsTyping();
+		expect(jqAttrSpy.calledOnceWithExactly('placeholder', 'ed.boon: Say hello to your fellows ...'));
+
+		// verify AJAX GET
+		expect(jqAjaxStub.calledOnce, 'fetch participants who are presently typing').to.equal(true);
+
+		let args = flatten(jqAjaxStub.args).shift();
+		expect(args).to.have.property('url', '/users/typing');
+		expect(args).to.have.property('type', 'get');
+	});
+
+	it('says display `participant is typing ...` when only `1` participant is presently typing', () => {
+		let jqAttrSpy = sandbox.spy(jQuery.fn, 'attr');
+		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
+			jqValueStub = sandbox.stub(jQuery.fn, 'val');
+		let chat = new Chat(jQuery, lodash);
+
+		jqValueStub.onFirstCall()
+			.returns('ed.boon');
+		jqAjaxStub.yieldsTo('success', ['ed.boon', 'SubZero']);
+		chat.displayParticipantsTyping();
+		expect(jqAttrSpy.calledOnceWithExactly('placeholder', 'SubZero is typing ...'));
+
+		// verify AJAX GET
+		expect(jqAjaxStub.calledOnce, 'fetch participants who are presently typing').to.equal(true);
+
+		let args = flatten(jqAjaxStub.args).shift();
+		expect(args).to.have.property('url', '/users/typing');
+		expect(args).to.have.property('type', 'get');
+	});
+
+	it('says display `multiple participants are typing ...` when multiple participants are presently typing', () => {
+		let jqAttrSpy = sandbox.spy(jQuery.fn, 'attr');
+		let jqAjaxStub = sandbox.stub(jQuery, 'ajax'),
+			jqValueStub = sandbox.stub(jQuery.fn, 'val');
+		let chat = new Chat(jQuery, lodash);
+
+		jqValueStub.onFirstCall()
+			.returns('ed.boon');
+		jqAjaxStub.yieldsTo('success', ['cage_jCage', 'ed.boon', 'SubZero']);
+		chat.displayParticipantsTyping();
+		expect(jqAttrSpy.calledOnceWithExactly('placeholder', '2 users are currently typing ...'));
+
+		// verify AJAX GET
+		expect(jqAjaxStub.calledOnce, 'fetch participants who are presently typing').to.equal(true);
+
+		let args = flatten(jqAjaxStub.args).shift();
+		expect(args).to.have.property('url', '/users/typing');
+		expect(args).to.have.property('type', 'get');
+	});
+
+	it('says cannot stop typing participant from typing when participant is not typing', () => {
+		let chat = new Chat(jQuery, lodash);
+		expect(chat.participantIsTyping, 'should be false by default').to.equal(false);
+		expect(chat.stopParticipantsTypingTimeoutId, 'should be `0` by default').to.equal(0);
+		chat.stopTyping(true);
+		chat.stopTyping(false);
+		expect(chat.stopParticipantsTypingTimeoutId, 'should still be `0` value').to.equal(0);
+		expect(chat.participantIsTyping, 'should still be false').to.equal(false);
+	});
+
+	it('says should stop typing participant from typing when participant `was` typing', () => {
+		let chat = new Chat(jQuery, lodash);
+		let postParticipantIsTypingStub = sandbox.stub(chat, 'postParticipantIsTyping');
+		chat.participantIsTyping = true;
+		chat.stopTyping();
+		expect(chat.stopParticipantsTypingTimeoutId, 'should be `0` by default').to.equal(0);
+		expect(postParticipantIsTypingStub.calledOnceWithExactly(false)).to.equal(true);
+	});
+
+	it('says set a timer event to stop typing participant from typing when participant `is` currently typing', () => {
+		let chat = new Chat(jQuery, lodash);
+		let postParticipantIsTypingStub = sandbox.stub(chat, 'postParticipantIsTyping');
+		chat.participantIsTyping = true;
+		chat.stopTyping(true);
+		expect(chat.stopParticipantsTypingTimeoutId, 'should be a nonzero value').not.to.equal(0);
+		timer.tick(4100); // tick timer forward 4.1 seconds
+		expect(postParticipantIsTypingStub.calledOnceWithExactly(false)).to.equal(true);
 	});
 });

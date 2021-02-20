@@ -2,24 +2,40 @@ import Page from "../page";
 
 class Chat extends Page {
 	/**
+	 * @type {Number|Timeout}
+	 */
+	displayMessagesIntId = 0;
+
+	/**
+	 * @type {Number|Timeout}
+	 */
+	displayParticipantsTypingIntId = 0;
+
+	/**
 	 * @type {{}}
 	 */
 	participants = null;
 
 	/**
-	 * @type {Number|Timeout}
+	 * @type {Boolean}
 	 */
-	displayMessagesIntId = null;
+	participantIsTyping = false;
 
 	/**
 	 * @type {Number|Timeout}
 	 */
-	updateParticipantCountIntId = null;
+	stopParticipantsTypingTimeoutId = 0;
+
+	/**
+	 * @type {Number|Timeout}
+	 */
+	updateParticipantCountIntId = 0;
 
 	compose() {
 		super.compose();
 		this.updateParticipantCount();
 		this.displayMessages();
+		this.displayParticipantsTyping();
 	}
 
 	displayMessages() {
@@ -70,6 +86,23 @@ class Chat extends Page {
 		dialogModal.modal();
 	}
 
+	displayParticipantsTyping() {
+		let jQuery = this.resolve('jQuery');
+		let messageInput = jQuery('input[name="message"]');
+		let me = jQuery('input[name="participant-nickname"]').val();
+		jQuery.getJSON('/users/typing', (participants) => {
+			let nicknames = participants.filter(participant => participant !== me);
+			let length = nicknames.length;
+			if (length >= 2) {
+				messageInput.attr('placeholder', (length + ' users are currently typing ...'));
+			} else if (length === 1) {
+				messageInput.attr('placeholder', (nicknames[0] + ' is typing ...'));
+			} else {
+				messageInput.attr('placeholder', (me + ': Say hello to your fellows ...'));
+			}
+		});
+	}
+
 	fetchMessages(callback) {
 		if (typeof callback !== 'function') {
 			throw new TypeError('Callback function was expected but not received.');
@@ -102,6 +135,16 @@ class Chat extends Page {
 	initialize() {
 		super.initialize();
 		this.setupAjax();
+		this.updateParticipantIsTyping(false);
+	}
+
+	postParticipantIsTyping(participantIsTyping = false) {
+		let jQuery = this.resolve('jQuery');
+		jQuery.post('/users/typing', {
+			is_typing: +(participantIsTyping),
+		});
+
+		this.participantIsTyping = participantIsTyping;
 	}
 
 	registerEvents() {
@@ -109,8 +152,11 @@ class Chat extends Page {
 
 		let jQuery = this.resolve('jQuery');
 		jQuery('button:contains("Send")').on('click', () => this.sendMessage());
-		jQuery('input[name="message"]').on('keyup', (onKeyUpEvent) =>
-			(onKeyUpEvent.keyCode === 13) && this.sendMessage());
+		/** IE11 oninput fix: Internet Explorer 10 & 11 fire the input event when an input field with a placeholder is
+		 * focused or on page load when the placeholder contains certain characters, like Chinese. */
+		jQuery('input[name="message"]')
+			.on('input', (onInputEvent) => (onInputEvent.target.value !== '') && this.updateParticipantIsTyping())
+			.on('keyup', (onKeyUpEvent) => (onKeyUpEvent.keyCode === 13) && this.sendMessage());
 		jQuery('a[href="#list-participants"]').on('click', (clickEvent) => {
 			clickEvent.preventDefault();
 			this.fetchParticipants(this.displayParticipantList);
@@ -122,6 +168,7 @@ class Chat extends Page {
 		});
 
 		this.displayMessagesIntId = setInterval(() => this.displayMessages(), 8000);
+		this.displayParticipantsTypingIntId = setInterval(() => this.displayParticipantsTyping(), 1000);
 		this.updateParticipantCountIntId =
 			setInterval(() => this.updateParticipantCount(), 60000);
 	}
@@ -135,6 +182,7 @@ class Chat extends Page {
 		let isSendButtonDisabled = sendButton.prop('disabled');
 		let message = lodash.trim(messageValue);
 		if (isSendButtonDisabled === false && message !== '') {
+			this.stopTyping(false);
 			sendButton.prop('disabled', true);
 			let myRoomIdentifier = jQuery('input[name="room-id"]').val();
 			let myParticipantIdentifier = jQuery('input[name="participant-id"]').val();
@@ -166,6 +214,28 @@ class Chat extends Page {
 		});
 	}
 
+	startTyping() {
+		if (this.participantIsTyping) {
+			return;
+		}
+
+		this.postParticipantIsTyping(true);
+	}
+
+	stopTyping(override = false) {
+		if (!this.participantIsTyping) {
+			return;
+		}
+
+		clearTimeout(this.stopParticipantsTypingTimeoutId);
+		if (!override) {
+			this.postParticipantIsTyping(false);
+		} else {
+			this.stopParticipantsTypingTimeoutId =
+				setTimeout(() => this.postParticipantIsTyping(false), 4000);
+		}
+	}
+
 	timeDifference(current, previous) {
 		let msPerMinute = (60 * 1000);
 		let msPerHour = (msPerMinute * 60);
@@ -192,6 +262,14 @@ class Chat extends Page {
 		this.fetchParticipants(function(jQuery, numberOf) {
 			jQuery('a[href="#list-participants"]').text(`${numberOf} Users Online`);
 		});
+	}
+
+	updateParticipantIsTyping(override = true) {
+		if (override) {
+			this.startTyping();
+		}
+
+		this.stopTyping(override);
 	}
 }
 

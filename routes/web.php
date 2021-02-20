@@ -1,6 +1,7 @@
 <?php
 
 	use App\Http\Controllers\ChatController;
+	use App\Http\Controllers\PresentlyTypingController;
 	use App\Http\Controllers\UserController;
 	use Illuminate\Support\Facades\Route;
 
@@ -17,7 +18,8 @@
 
 	Route::get('/room/general', [ChatController::class, 'index'])->name('room.general');
 
-	Route::get('/', [UserController::class, 'create'])->name('login');
+	Route::post('/users/typing', [PresentlyTypingController::class, 'update'])->name('user.typing');
+	Route::get('/users/typing', [PresentlyTypingController::class, 'index'])->name('users.typing');
 
 	Route::post('/join', [UserController::class, 'store'])->name('join');
-
+	Route::get('/', [UserController::class, 'create'])->name('login');

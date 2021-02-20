@@ -14,8 +14,6 @@
 	class UserController extends Controller {
 
 		/**
-		 * Create a new controller instance.
-		 *
 		 * @return void
 		 */
 		public function __construct() {
@@ -23,8 +21,6 @@
 		}
 
 		/**
-		 * Display a listing of the resource.
-		 *
 		 * @return Renderable
 		 */
 		public function create(): Renderable {
@@ -35,14 +31,12 @@
 		}
 
 		/**
-		 * Store a newly created resource in storage.
-		 *
 		 * @param Request $request
 		 * @return RedirectResponse
 		 */
 		public function store(Request $request): RedirectResponse {
+			// TODO: Quality of Life Enhancement; Fix an issue where multiple users could have the same nickname?
 			// Validate and save user nickname.
-			// TODO: Quality of Life Enhancement; Fix issue where multiple users could have the same nickname.
 			$attributes = $this->validator($request);
 			$user = User::create($attributes);
 			$user->save();
