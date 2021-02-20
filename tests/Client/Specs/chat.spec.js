@@ -11,8 +11,14 @@ describe('ChatPage', () => {
 	let timer = null,
 		sandbox = sinon.createSandbox();
 
-	beforeEach('setup fake timers', () => {
+	beforeEach('setup fake timers and localStorage', () => {
 		timer = sandbox.useFakeTimers();
+
+		let nullable = (() => null);
+		global.localStorage = {
+			getItem: nullable,
+			setItem: nullable,
+		};
 	});
 
 	afterEach('cleanup and reset', () => {
@@ -791,7 +797,7 @@ describe('ChatPage', () => {
 			.returns('ed.boon');
 		jqAjaxStub.yieldsTo('success', []);
 		chat.displayParticipantsTyping();
-		expect(jqAttrSpy.calledOnceWithExactly('placeholder', 'ed.boon: Say hello to your fellows ...'));
+		expect(jqAttrSpy.calledWithExactly('placeholder', 'ed.boon: Say hello to your fellows ...')).to.equal(true);
 
 		// verify AJAX GET
 		expect(jqAjaxStub.calledOnce, 'fetch participants who are presently typing').to.equal(true);
@@ -811,7 +817,7 @@ describe('ChatPage', () => {
 			.returns('ed.boon');
 		jqAjaxStub.yieldsTo('success', ['ed.boon']);
 		chat.displayParticipantsTyping();
-		expect(jqAttrSpy.calledOnceWithExactly('placeholder', 'ed.boon: Say hello to your fellows ...'));
+		expect(jqAttrSpy.calledWithExactly('placeholder', 'ed.boon: Say hello to your fellows ...')).to.equal(true);
 
 		// verify AJAX GET
 		expect(jqAjaxStub.calledOnce, 'fetch participants who are presently typing').to.equal(true);
@@ -831,7 +837,7 @@ describe('ChatPage', () => {
 			.returns('ed.boon');
 		jqAjaxStub.yieldsTo('success', ['ed.boon', 'SubZero']);
 		chat.displayParticipantsTyping();
-		expect(jqAttrSpy.calledOnceWithExactly('placeholder', 'SubZero is typing ...'));
+		expect(jqAttrSpy.calledWithExactly('placeholder', 'SubZero is typing ... 💭')).to.equal(true);
 
 		// verify AJAX GET
 		expect(jqAjaxStub.calledOnce, 'fetch participants who are presently typing').to.equal(true);
@@ -851,7 +857,7 @@ describe('ChatPage', () => {
 			.returns('ed.boon');
 		jqAjaxStub.yieldsTo('success', ['cage_jCage', 'ed.boon', 'SubZero']);
 		chat.displayParticipantsTyping();
-		expect(jqAttrSpy.calledOnceWithExactly('placeholder', '2 users are currently typing ...'));
+		expect(jqAttrSpy.calledWithExactly('placeholder', '2 users are typing ... 💭')).to.equal(true);
 
 		// verify AJAX GET
 		expect(jqAjaxStub.calledOnce, 'fetch participants who are presently typing').to.equal(true);

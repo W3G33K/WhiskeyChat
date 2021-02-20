@@ -94,13 +94,24 @@ class Chat extends Page {
 			let nicknames = participants.filter(participant => participant !== me);
 			let length = nicknames.length;
 			if (length >= 2) {
-				messageInput.attr('placeholder', (length + ' users are currently typing ...'));
+				messageInput.attr('placeholder', (length + ' users are typing ... 💭'));
 			} else if (length === 1) {
-				messageInput.attr('placeholder', (nicknames[0] + ' is typing ...'));
+				messageInput.attr('placeholder', (nicknames[0] + ' is typing ... 💭'));
 			} else {
 				messageInput.attr('placeholder', (me + ': Say hello to your fellows ...'));
 			}
 		});
+	}
+
+	dispose() {
+		super.dispose();
+		// IE11 onunload fix: Store a reset indicator on page refresh
+		if (this.participantIsTyping) {
+			localStorage.setItem('resetParticipantIsTyping', 'y');
+		}
+
+		// TODO: Implement websockets?
+		this.postParticipantIsTyping(false);
 	}
 
 	fetchMessages(callback) {
@@ -135,6 +146,8 @@ class Chat extends Page {
 	initialize() {
 		super.initialize();
 		this.setupAjax();
+		this.participantIsTyping =
+			(localStorage.getItem('resetParticipantIsTyping') === 'y');
 		this.updateParticipantIsTyping(false);
 	}
 
@@ -155,6 +168,7 @@ class Chat extends Page {
 		/** IE11 oninput fix: Internet Explorer 10 & 11 fire the input event when an input field with a placeholder is
 		 * focused or on page load when the placeholder contains certain characters, like Chinese. */
 		jQuery('input[name="message"]')
+			.on('blur', () => this.postParticipantIsTyping(false))
 			.on('input', (onInputEvent) => (onInputEvent.target.value !== '') && this.updateParticipantIsTyping())
 			.on('keyup', (onKeyUpEvent) => (onKeyUpEvent.keyCode === 13) && this.sendMessage());
 		jQuery('a[href="#list-participants"]').on('click', (clickEvent) => {
