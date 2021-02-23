@@ -1,4 +1,8 @@
-const mix = require('laravel-mix');
+let mix = require('laravel-mix');
+
+/** @mix-constants */
+const PUBLIC_DIR = './public';
+const USE_PRODUCTION_SRC_MAPS = false;
 
 /*
  |--------------------------------------------------------------------------
@@ -11,7 +15,30 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        //
-    ]);
+require('laravel-mix-polyfill');
+
+mix.js('./resources/js/app.js', 'js')
+	.js('./resources/js/pages/chat.js', 'js/pages')
+	.js('./resources/js/pages/user.js', 'js/pages')
+	.postCss('./resources/css/app.css', 'css')
+	.setPublicPath(PUBLIC_DIR)
+	.sourceMaps(USE_PRODUCTION_SRC_MAPS, 'source-map')
+	.polyfill({
+		enabled: true,
+		useBuiltIns: "usage",
+		targets: {"firefox": "50", "ie": 11}
+	});
+
+if (mix.inProduction()) {
+	mix.version();
+	mix.webpackConfig({
+		module: {
+			rules: [
+				{
+					test: /\.js$/,
+					use: './whiskey-debug-stripper'
+				}
+			]
+		}
+	});
+}

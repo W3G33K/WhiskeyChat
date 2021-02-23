@@ -4,18 +4,18 @@
 	use Illuminate\Database\Schema\Blueprint;
 	use Illuminate\Support\Facades\Schema;
 
-	class CreateUsersTable extends Migration {
+	class UpdateUsersTableIsTypingIndicator extends Migration {
 		/**
 		 * Run the migrations.
 		 *
 		 * @return void
 		 */
 		public function up() {
-			Schema::create('users', function(Blueprint $table) {
-				$table->id();
-				$table->string('nickname', 24);
-				$table->rememberToken();
-				$table->timestamps();
+			Schema::table('users', function(Blueprint $table) {
+				$table->boolean('is_typing')
+					  ->nullable(false)
+					  ->default(false)
+					  ->after('nickname');
 			});
 		}
 
@@ -25,6 +25,8 @@
 		 * @return void
 		 */
 		public function down() {
-			Schema::dropIfExists('users');
+			Schema::table('users', function(Blueprint $table) {
+				$table->removeColumn('is_typing');
+			});
 		}
 	}

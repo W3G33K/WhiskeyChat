@@ -1,0 +1,86 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
+
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	font-family: "Ubuntu", sans-serif;
+}
+
+form label:after {
+	content: ":"
+}
+
+.bg-light-gray {
+	background-color: #e9e9e9;
+}
+
+.icon {
+	font-style: normal;
+	vertical-align: text-bottom;
+}
+
+.icon.user-icon:before {
+	content: "\1F464"
+}
+
+.menubar {
+	border-radius: 0 0 0 8px;
+	color: #92989e;
+}
+
+.buttons .button {
+	border-radius: 50%;
+	display: inline-block;
+	height: 16px;
+	margin-left: 2px;
+	position: relative;
+	width: 16px;
+}
+
+.buttons .button.close-button {
+	background-color: #f5886e;
+}
+
+.buttons .button.minimize {
+	background-color: #fdbf68;
+}
+
+.buttons .button.maximize {
+	background-color: #a3d063;
+}
+
+.footer {
+	border-radius: 8px 0 0 0;
+	box-shadow: 0 1px 30px rgba(0, 0, 0, 0.1);
+	padding: 8px 16px 0;
+}
+
+.text-embossed {
+	color: rgba(89, 96, 106, 0.32);
+}
+
+.text-embossed:before, .text-embossed:after {
+	content: "\2015";
+	margin: 0 0.25em;
+}
+
+.when:before {
+	content: "\2015";
+	margin-right: 0.25em;
+}
+
+/* Specific IE11 CSS Styles (to auto-center main element on welcome page) */
+@media all and (min-width: 769px) and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.welcome .d-flex {
+		transform: translate(0, 18%);
+	}
+
+	.welcome .min-vh-100 {
+		min-height: auto !important;
+	}
+}
